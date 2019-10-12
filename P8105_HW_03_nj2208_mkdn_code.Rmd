@@ -51,14 +51,111 @@ dept=instacart %>%
 ### 1.b
 There are 134 aisles in total and the most items are ordered from aisle 83, the fresh vegetables aisle.
 
-```{r}
-c_dept = dept %>% 
+```{r part 1c}
+c_dept = dept %>%
+  as.data.frame() %>% 
   filter(total>10000) %>% 
-  arrange(aisle_id) %>% 
-  ggplot(aes(x = aisle, y = total))+
-  geom_bar()
+  arrange(aisle_id)
+
+c_dept %>% 
+  ggplot(aes(x = total, y = aisle))+
+  geom_point()
+```
+
+```{r part 1d}
+baking=instacart %>% 
+  group_by(aisle_id,aisle,product_name) %>% 
+  filter(
+    aisle=="baking ingredients"
+    ) %>% 
+  summarise(
+    total=n()
+  ) %>% 
+  arrange(
+    -total
+  ) %>% 
+  head(3)
+
+dog_food=instacart %>% 
+  group_by(aisle_id,aisle,product_name) %>% 
+  filter(
+    aisle=="dog food care"
+    ) %>% 
+  summarise(
+    total=n()
+  ) %>% 
+  arrange(
+    -total
+  ) %>% 
+  head(3)
+
+pack_veg_fruits=instacart %>% 
+  group_by(aisle_id,aisle,product_name) %>% 
+  filter(
+    aisle=="packaged vegetables fruits"
+    ) %>% 
+  summarise(
+    total=n()
+  ) %>% 
+  arrange(
+    -total
+  ) %>% 
+  head(3)
+
+d_table = bind_rows(baking,dog_food,pack_veg_fruits) %>% 
+  rename(total_ordered=total) %>% 
+knitr::kable(digits = 1)
+```
+
+`r d_table`
+
+```{r part 1e}
+pink_lady = instacart %>% 
+  select(product_name,order_dow,order_hour_of_day) %>% 
+  filter(
+    product_name=="Pink Lady Apples"
+    ) %>%
+  group_by(product_name,order_dow) %>% 
+  summarise(
+    avg_hour_ordered=mean(order_hour_of_day)
+  ) %>% 
+  pivot_wider(
+    names_from = order_dow,
+    values_from = avg_hour_ordered
+  )
+
+ice_cream = instacart %>% 
+  filter(
+    product_name=="Coffee Ice Cream"
+    ) %>% 
+  select(product_name,order_dow,order_hour_of_day) %>% 
+  group_by(product_name,order_dow) %>% 
+  summarise(
+    avg_hour_ordered=mean(order_hour_of_day)
+  ) %>% 
+  pivot_wider(
+    names_from = order_dow,
+    values_from = avg_hour_ordered
+  )
+
+e_table = bind_rows(pink_lady,ice_cream) %>% 
+  rename(Monday="0",
+         Tuesday="1",
+         Wednesday="2",
+         Thursday="3",
+         Friday="4",
+         Saturday="5",
+         Sunday="6",
+         Product="product_name") %>%
+knitr::kable(digits = 1)
 
 ```
+
+`r e_table`
+
+## Problem 2
+
+
 
 
 
