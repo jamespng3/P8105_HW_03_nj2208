@@ -1,0 +1,65 @@
+---
+title: "HW_03_nj2208"
+author: "James Ng"
+date: "10/12/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(rvest)
+library(httr)
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+	fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+)
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+```
+
+## Problem 1
+
+```{r problem 1 code}
+library(p8105.datasets)
+data("instacart")
+```
+
+### 1a.
+The data set is a dataframe of 15 variables and 138617 observations. The data frame describes the items available for ordering, their departments and the time of day that they get ordered.
+
+```{r problem 1b code}
+dept=instacart %>% 
+  as_tibble %>% 
+  select(order_id:add_to_cart_order,aisle_id:department) %>% 
+  group_by(aisle_id,aisle) %>%  
+  summarise(
+    total=n()
+  ) %>% 
+  arrange(
+   -total
+  )
+```
+
+### 1.b
+There are 134 aisles in total and the most items are ordered from aisle 83, the fresh vegetables aisle.
+
+```{r}
+c_dept = dept %>% 
+  filter(total>10000) %>% 
+  arrange(aisle_id) %>% 
+  ggplot(aes(x = aisle, y = total))+
+  geom_bar()
+
+```
+
+
+
+
