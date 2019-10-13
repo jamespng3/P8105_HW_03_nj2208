@@ -1,41 +1,22 @@
----
-title: "HW_03_nj2208"
-author: "James Ng"
-date: "10/12/2019"
-output: github_document
----
-
-```{r setup, include=FALSE}
-library(tidyverse)
-library(rvest)
-library(httr)
-knitr::opts_chunk$set(
-	echo = TRUE,
-	warning = FALSE,
-	fig.width = 8, 
-  fig.height = 6,
-  out.width = "90%"
-)
-options(
-  ggplot2.continuous.colour = "viridis",
-  ggplot2.continuous.fill = "viridis"
-)
-scale_colour_discrete = scale_colour_viridis_d
-scale_fill_discrete = scale_fill_viridis_d
-theme_set(theme_minimal() + theme(legend.position = "bottom"))
-```
+HW\_03\_nj2208
+================
+James Ng
+10/12/2019
 
 ## Problem 1
 
-```{r problem 1 code}
+``` r
 library(p8105.datasets)
 data("instacart")
 ```
 
 ### 1a.
-The data set is a dataframe of 15 variables and 138617 observations. The data frame describes the items available for ordering, their departments and the time of day that they get ordered.
 
-```{r problem 1b code}
+The data set is a dataframe of 15 variables and 138617 observations. The
+data frame describes the items available for ordering, their departments
+and the time of day that they get ordered.
+
+``` r
 dept=instacart %>% 
   as_tibble %>% 
   select(order_id:add_to_cart_order,aisle_id:department) %>% 
@@ -49,9 +30,11 @@ dept=instacart %>%
 ```
 
 ### 1.b
-There are 134 aisles in total and the most items are ordered from aisle 83, the fresh vegetables aisle.
 
-```{r part 1c}
+There are 134 aisles in total and the most items are ordered from aisle
+83, the fresh vegetables aisle.
+
+``` r
 c_dept = dept %>%
   as.data.frame() %>% 
   filter(total>10000) %>% 
@@ -62,7 +45,9 @@ c_dept %>%
   geom_point()
 ```
 
-```{r part 1d}
+<img src="P8105_HW_03_nj2208_mkdn_code_files/figure-gfm/part 1c-1.png" width="90%" />
+
+``` r
 baking=instacart %>% 
   group_by(aisle_id,aisle,product_name) %>% 
   filter(
@@ -107,9 +92,19 @@ d_table = bind_rows(baking,dog_food,pack_veg_fruits) %>%
 knitr::kable(digits = 1)
 ```
 
-`r d_table`
+| aisle\_id | aisle                      | product\_name                                 | total\_ordered |
+| --------: | :------------------------- | :-------------------------------------------- | -------------: |
+|        17 | baking ingredients         | Light Brown Sugar                             |            499 |
+|        17 | baking ingredients         | Pure Baking Soda                              |            387 |
+|        17 | baking ingredients         | Cane Sugar                                    |            336 |
+|        40 | dog food care              | Snack Sticks Chicken & Rice Recipe Dog Treats |             30 |
+|        40 | dog food care              | Organix Chicken & Brown Rice Recipe           |             28 |
+|        40 | dog food care              | Small Dog Biscuits                            |             26 |
+|       123 | packaged vegetables fruits | Organic Baby Spinach                          |           9784 |
+|       123 | packaged vegetables fruits | Organic Raspberries                           |           5546 |
+|       123 | packaged vegetables fruits | Organic Blueberries                           |           4966 |
 
-```{r part 1e}
+``` r
 pink_lady = instacart %>% 
   select(product_name,order_dow,order_hour_of_day) %>% 
   filter(
@@ -148,19 +143,21 @@ e_table = bind_rows(pink_lady,ice_cream) %>%
          Sunday="6",
          Product="product_name") %>%
 knitr::kable(digits = 1)
-
 ```
 
-`r e_table`
+| Product          | Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday |
+| :--------------- | -----: | ------: | --------: | -------: | -----: | -------: | -----: |
+| Pink Lady Apples |   13.4 |    11.4 |      11.7 |     14.2 |   11.6 |     12.8 |   11.9 |
+| Coffee Ice Cream |   13.8 |    14.3 |      15.4 |     15.3 |   15.2 |     12.3 |   13.8 |
 
 ## Problem 2
 
-```{r}
+``` r
 library(p8105.datasets)
 data("brfss_smart2010")
 ```
 
-```{r problem 2 data cleaning}
+``` r
 brfss_cleaning=brfss_smart2010 %>% 
   janitor::clean_names() %>% 
   filter(topic == "Overall Health") %>% 
@@ -170,7 +167,7 @@ brfss_cleaning=brfss_smart2010 %>%
   ) 
 ```
 
-```{r problem 2a response code}
+``` r
 brfss_2002 =  brfss_cleaning %>% 
   filter(year==2002) %>% 
   group_by(state) %>% 
@@ -188,11 +185,13 @@ brfss_2010 =  brfss_cleaning %>%
   filter(observed>=7)
 ```
 
-`r pull(brfss_2002,state)` were the states with 7 or more than observation sites in 2002.
+CT, FL, MA, NC, NJ, PA were the states with 7 or more than observation
+sites in 2002.
 
-`r pull(brfss_2010,state)` were the states with 7 or more than observation sites in 2010.
+CA, CO, FL, MA, MD, NC, NE, NJ, NY, OH, PA, SC, TX, WA were the states
+with 7 or more than observation sites in 2010.
 
-```{r problem 2b plot}
+``` r
 exc_health=brfss_cleaning %>% 
   filter(response=="Excellent") %>% 
   group_by(year,state) %>%
@@ -204,10 +203,11 @@ exc_health %>%
   ggplot(aes(x=year,y=avg_data_value,color=state))+
   geom_line(alpha=.3,aes(group=state))+
   theme(legend.position="none")
-
 ```
 
-```{r problem 2c}
+<img src="P8105_HW_03_nj2208_mkdn_code_files/figure-gfm/problem 2b plot-1.png" width="90%" />
+
+``` r
 nyc_data_2006=brfss_cleaning %>% 
   filter(state=="NY",year=="2006") %>% 
   group_by(response)
@@ -233,15 +233,6 @@ nyc_data %>%
   )
 ```
 
+<img src="P8105_HW_03_nj2208_mkdn_code_files/figure-gfm/problem 2c-1.png" width="90%" />
+
 ## Problem 3
-
-```{r}
-
-```
-
-
-
-
-
-
-
