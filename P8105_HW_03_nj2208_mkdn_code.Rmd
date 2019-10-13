@@ -33,7 +33,7 @@ data("instacart")
 ```
 
 ### 1a.
-The data set is a dataframe of 15 variables and 138617 observations. The data frame describes the items available for ordering, their departments and the time of day that they get ordered.
+The data set is a dataframe of `r ncol(instacart)` variables and `r nrow(instacart)` observations. The data frame describes the items available for ordering, their departments (`r pull(instacart,department)`) and the time of day that they get ordered.
 
 ```{r problem 1b code}
 dept=instacart %>% 
@@ -235,13 +235,36 @@ nyc_data %>%
 
 ## Problem 3
 
-```{r}
+```{r problem 3 tidying}
+accel=read_csv(file="./accel_data.csv")
 
+accel_mod=accel %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    weekday_vs_weekend = case_when(
+      day == "Monday" ~ "Weekday",
+      day == "Tuesday" ~ "Weekday",
+      day == "Wednesday" ~ "Weekday",
+      day == "Thursday" ~ "Weekday",
+      day == "Friday" ~ "Weekday",
+      day == "Saturday" ~ "Weekend",
+      day == "Sunday" ~ "Weekend",
+  )) %>% 
+  select(week,day_id,day_of_the_week = day,weekday_vs_weekend,everything()) %>% 
+  pivot_longer(
+    activity_1:activity_1440,
+    names_to = "activity_num", 
+    values_to = "activity_count"
+    )
 ```
 
+The cleaned dataset is a data set with `r ncol(accel_mod)` variables and `r nrow(accel_mod)` observations. The variables of this dataframe are `r colnames(accel_mod)`.
 
+```{r grouping}
+day_activity = accel_mod
+  
 
-
+```
 
 
 
