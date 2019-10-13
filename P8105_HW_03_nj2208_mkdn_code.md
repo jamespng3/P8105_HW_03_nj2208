@@ -274,3 +274,15 @@ The cleaned dataset is a data set with 6 variables and 50400
 observations. The variables of this dataframe are week, day\_id,
 day\_of\_the\_week, weekday\_vs\_weekend, activity\_num,
 activity\_count.
+
+``` r
+activity_day=accel_mod %>% 
+  group_by(day_id,day_of_the_week) %>% 
+  summarize(
+    total_activity=sum(activity_count)
+  ) #%>% 
+ #knitr::kable(digits = 1)
+```
+
+There are 2 saturdays where there is practically no activity by the man
+under observation.

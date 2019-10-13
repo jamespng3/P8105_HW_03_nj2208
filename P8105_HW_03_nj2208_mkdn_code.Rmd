@@ -2,7 +2,7 @@
 title: "HW_03_nj2208"
 author: "James Ng"
 date: "10/12/2019"
-output: github_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -260,6 +260,15 @@ accel_mod=accel %>%
 
 The cleaned dataset is a data set with `r ncol(accel_mod)` variables and `r nrow(accel_mod)` observations. The variables of this dataframe are `r colnames(accel_mod)`.
 
+```{r problem 3b }
+activity_day=accel_mod %>% 
+  group_by(day_id,day_of_the_week) %>% 
+  summarize(
+    total_activity=sum(activity_count)
+  )
+activity_day %>% 
+ knitr::kable(digits = 1)
+```
 
-
+There are 2 saturdays where there is practically no activity by the man under observation. 
 
