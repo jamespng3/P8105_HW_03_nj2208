@@ -280,9 +280,65 @@ activity_day=accel_mod %>%
   group_by(day_id,day_of_the_week) %>% 
   summarize(
     total_activity=sum(activity_count)
-  ) #%>% 
- #knitr::kable(digits = 1)
+  )
+activity_day %>% 
+ knitr::kable(digits = 1)
 ```
+
+| day\_id | day\_of\_the\_week | total\_activity |
+| ------: | :----------------- | --------------: |
+|       1 | Friday             |        480542.6 |
+|       2 | Monday             |         78828.1 |
+|       3 | Saturday           |        376254.0 |
+|       4 | Sunday             |        631105.0 |
+|       5 | Thursday           |        355923.6 |
+|       6 | Tuesday            |        307094.2 |
+|       7 | Wednesday          |        340115.0 |
+|       8 | Friday             |        568839.0 |
+|       9 | Monday             |        295431.0 |
+|      10 | Saturday           |        607175.0 |
+|      11 | Sunday             |        422018.0 |
+|      12 | Thursday           |        474048.0 |
+|      13 | Tuesday            |        423245.0 |
+|      14 | Wednesday          |        440962.0 |
+|      15 | Friday             |        467420.0 |
+|      16 | Monday             |        685910.0 |
+|      17 | Saturday           |        382928.0 |
+|      18 | Sunday             |        467052.0 |
+|      19 | Thursday           |        371230.0 |
+|      20 | Tuesday            |        381507.0 |
+|      21 | Wednesday          |        468869.0 |
+|      22 | Friday             |        154049.0 |
+|      23 | Monday             |        409450.0 |
+|      24 | Saturday           |          1440.0 |
+|      25 | Sunday             |        260617.0 |
+|      26 | Thursday           |        340291.0 |
+|      27 | Tuesday            |        319568.0 |
+|      28 | Wednesday          |        434460.0 |
+|      29 | Friday             |        620860.0 |
+|      30 | Monday             |        389080.0 |
+|      31 | Saturday           |          1440.0 |
+|      32 | Sunday             |        138421.0 |
+|      33 | Thursday           |        549658.0 |
+|      34 | Tuesday            |        367824.0 |
+|      35 | Wednesday          |        445366.0 |
 
 There are 2 saturdays where there is practically no activity by the man
 under observation.
+
+``` r
+act_by_day=accel_mod %>% 
+  group_by(day_id)
+
+act_by_day %>% 
+  ggplot(aes(x=day_id, y=activity_count))+
+  geom_col()+
+  facet_grid(~day_of_the_week)
+```
+
+<img src="P8105_HW_03_nj2208_mkdn_code_files/figure-gfm/problem 3c-1.png" width="90%" />
+
+This person experiences the most fluctuation in his activity over the
+weekends and monday. His activity is fairly consistent across most of
+the other days of the week. He also has 2 saturdays of literally no
+activity when compared to the other days.

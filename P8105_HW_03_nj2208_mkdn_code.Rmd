@@ -2,7 +2,7 @@
 title: "HW_03_nj2208"
 author: "James Ng"
 date: "10/12/2019"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -148,7 +148,6 @@ e_table = bind_rows(pink_lady,ice_cream) %>%
          Sunday="6",
          Product="product_name") %>%
 knitr::kable(digits = 1)
-
 ```
 
 `r e_table`
@@ -204,7 +203,6 @@ exc_health %>%
   ggplot(aes(x=year,y=avg_data_value,color=state))+
   geom_line(alpha=.3,aes(group=state))+
   theme(legend.position="none")
-
 ```
 
 ```{r problem 2c}
@@ -272,3 +270,14 @@ activity_day %>%
 
 There are 2 saturdays where there is practically no activity by the man under observation. 
 
+```{r problem 3c}
+act_by_day=accel_mod %>% 
+  group_by(day_id)
+
+act_by_day %>% 
+  ggplot(aes(x=day_id, y=activity_count))+
+  geom_col()+
+  facet_grid(~day_of_the_week)
+```
+
+This person experiences the most fluctuation in his activity over the weekends and monday. His activity is fairly consistent across most of the other days of the week. He also has 2 saturdays of literally no activity when compared to the other days.
