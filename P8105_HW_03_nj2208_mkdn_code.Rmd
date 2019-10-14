@@ -260,7 +260,8 @@ The cleaned dataset is a data set with `r ncol(accel_mod)` variables and `r nrow
 
 ```{r problem 3b }
 activity_day=accel_mod %>% 
-  group_by(day_id,day_of_the_week) %>% 
+  separate(activity_num,into=c("activity","minute"),sep = "_") %>% 
+  group_by(day_id,day_of_the_week,week,weekday_vs_weekend) %>% 
   summarize(
     total_activity=sum(activity_count)
   )
@@ -271,13 +272,19 @@ activity_day %>%
 There are 2 saturdays where there is practically no activity by the man under observation. 
 
 ```{r problem 3c}
-act_by_day=accel_mod %>% 
-  group_by(day_id)
+act_by_day=accel_mod %>%  
+  separate(activity_num,into=c("activity","minute"),sep = "_") %>% 
+  mutate(minute=as.numeric(minute)) %>% 
+  group_by(day_id,day_of_the_week,week,weekday_vs_weekend)
+
+activity_day %>% 
+  ggplot(aes(x=day_id, y=total_activity,color=day_of_the_week))+
+  geom_line()
 
 act_by_day %>% 
-  ggplot(aes(x=day_id, y=activity_count))+
-  geom_col()+
-  facet_grid(~day_of_the_week)
+  ggplot(aes(x=minute, y=activity_count,color=day_of_the_week))+
+  geom_line()+
+  scale_x_continuous()
 ```
 
-This person experiences the most fluctuation in his activity over the weekends and monday. His activity is fairly consistent across most of the other days of the week. He also has 2 saturdays of literally no activity when compared to the other days.
+I was not sure which graph we were supposed to make so I made 2. The graphs show that he  has no activity during the first few hours after midnight. This makes sense as one would assume he is sleeping during this time. This person experiences the most fluctuation in his activity over the weekends but his activity is fairly consistent across most of the other days of the week. Wednesday is the most consistent and friday he spikes around 8pm until around 10pm. He also has 2 saturdays of literally no activity when compared to the other days.
